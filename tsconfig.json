@@ -20,7 +20,6 @@
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "noImplicitAny": true,                               /* Enable error reporting for expressions and declarations with an implied `any` type.. */
-    "noUnusedParameters": true,                          /* Raise an error when a function parameter isn't read */
 
     /* Completeness */
     "skipDefaultLibCheck": true,                         /* Skip type checking .d.ts files that are included with TypeScript. */
