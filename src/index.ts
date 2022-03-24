@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 
+app.get('/game-sessions', (req, res, next) => {
+  res.send('NOT IMPLEMENTED');
+});
+
 /** Error handling */
 app.use((req, res, next) => {
   const error = new Error('not found');
