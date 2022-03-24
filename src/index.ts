@@ -5,6 +5,7 @@ import cors from 'cors';
 import { config } from './config';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import { gameSessionsRouter } from './routes/gameSessionRouter';
 
 const app = express();
 
@@ -13,9 +14,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-app.get('/game-sessions', (req, res, next) => {
-  res.send('NOT IMPLEMENTED');
-});
+app.use('/game-sessions', gameSessionsRouter);
 
 /** Error handling */
 app.use((req, res, next) => {
