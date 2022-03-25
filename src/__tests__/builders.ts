@@ -34,7 +34,7 @@ const aHeadshotMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   };
 };
 
-const aBombMeasurement = ({ minimumTime }) => {
+const aBombMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Bomb',
