@@ -10,7 +10,7 @@ const aMoveMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   };
 };
 
-const aBodyMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
+const aMissesMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Misses',
@@ -18,7 +18,7 @@ const aBodyMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   };
 };
 
-const aMissesMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
+const aBodyMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Body',
@@ -42,9 +42,26 @@ const aBombMeasurement = ({ minimumTime }: {minimumTime: number;}) => {
   };
 };
 
-const someMeasurements = () => {
-  const measurementsCounter = chance.natural({ min: 20, max: 100 });
-  return []; // TODO
+const aNonBombMeasurement = ({ minTime } : {minTime: number}) => {
+  const buildersToPickFrom = [aHeadshotMeasurement, aBodyMeasurement, aMissesMeasurement, aMoveMeasurement];
+  const builder = chance.pickone(buildersToPickFrom);
+  return builder({ minimumTime: minTime });
+};
+
+const someMeasurements = ({ withBomb = chance.bool(), numOfMeasurements =  chance.natural({ min: 20, max: 100 }) }: {withBomb?: boolean; numOfMeasurements?: number} = {}) => {
+  const measurements = [];
+
+  let currentTime =0;
+  for (let i=0; i<numOfMeasurements-1; i++){
+    const measurement = aNonBombMeasurement({ minTime: currentTime });
+    measurements.push(measurement);
+    currentTime = measurement.time;
+  }
+
+  const lastMeasurement = withBomb ? aBombMeasurement({ minimumTime:currentTime }) : aNonBombMeasurement({ minTime: currentTime });
+  measurements.push(lastMeasurement);
+
+  return measurements;
 };
 
 export const aGameSessionInput = () => {
@@ -52,6 +69,6 @@ export const aGameSessionInput = () => {
   return {
     player_name: chance.name({}),
     game_session_name: chance.character(),
-    measurements: someMeasurements()
+    measurements
   };
 };
