@@ -33,6 +33,11 @@ router.post('/', (req, res, next) => {
   //  calculates the measurements' grades and accumulated scores, stores the information in the database and returns the game session id
   const { gameSession: gameSessionInput } =
     req.body as CreateGameSessionRequest;
+
+  if (!gameSessionInput) {
+    return res.status(400).send('game session input is missing');
+  }
+
   const calculator = new GradeCalculator(gameSessionInput.measurements);
   const {
     skillScores: { speedScore, accuracyScore },
