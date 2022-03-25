@@ -37,9 +37,6 @@ export class GradeCalculator {
     };
   };
 
-  /**
-   * Gets accumulated average of all measurement types.
-   */
   private getAccumulatedAverage = (): Record<
     MeasurementType,
     { averageScore: number }
@@ -60,23 +57,6 @@ export class GradeCalculator {
       ),
     ) as Record<MeasurementType, { averageScore: number }>;
   };
-
-  // private getSpeedGrade = (measurements: Measurement[]) => {
-  //   const speedMeasurements = measurements.filter(this.isSpeedMeasurement);
-  //   speedMeasurements.reduce((score, measurement) => {
-  //     const measurementGrade =
-  //       measurement.type === 'Move'
-  //         ? this.getMoveGrade(measurement)
-  //         : this.getBombGrade(measurement);
-  //     return score + measurementGrade;
-  //   }, 0);
-  // };
-
-  // private isMeasurementOfType =
-  //   <T extends MeasurementType>(measurementType: T) =>
-  //   (measurement: Measurement): measurement is T => {
-  //     return measurement.type === measurementType;
-  //   };
 
   private splitByMeasurementType = () => {
     const isBombMeasurement = (
@@ -113,18 +93,6 @@ export class GradeCalculator {
       },
     };
   };
-
-  // private getAverageForMeasurementType = <T extends MeasurementType>(
-  //   measurements: Measurement[],
-  //   measurementType: T,
-  // ) => {
-  //   const relevantMeasures = this.splitByMeasurementType(measurements);
-  //   const grader = this.getMeasurementGrader(measurementType);
-  //   return relevantMeasures.reduce((totalScore, measurement) => {
-  //     const measurementGrade = grader(measurement);
-  //     return totalScore + measurementGrade;
-  //   }, 0);
-  // };
 
   private getMeasurementGrade = (measurement: Measurement) => {
     switch (measurement.type) {
@@ -166,26 +134,6 @@ export class GradeCalculator {
     );
   };
 
-  // private getMeasurementGrade = (measurement: Measurement) => {
-  //   const graders = {
-  //     Bomb: this.getBombGrade,
-  //     Move: this.getMoveGrade,
-  //     Headshot: this.getHeadshotGrade,
-  //     Body: this.getBodyGrade,
-  //     Misses: this.getMissesGrade,
-  //   };
-  //   switch (measurement.type) {
-  //     case 'Body':
-  //       this.getBodyGrade(measurement);
-  //   }
-  //   return graders[measurement.type](measurement);
-  // };
-
-  // private isSpeedMeasurement = (
-  //   measurement: Measurement,
-  // ): measurement is SpeedMeasurement =>
-  //   measurement.type === 'Bomb' || measurement.type === 'Move';
-
   private getMoveGrade = ({ value }: MoveMeasurement) => {
     if (value < 105) {
       return 100;
@@ -215,16 +163,3 @@ export class GradeCalculator {
     return 0;
   };
 }
-
-/*
- Speed’s measurement types are:
- Move - The time of a mouse movement from mid screen to a target (value in miliSeconds int) – Can happen several times in a session.
- Bomb - The total time it took to implant a bomb – Can happen only once at the most (value in boolean).
-*/
-
-// /*
-//  Accuracy’s measurement types are:
-//  Misses - The distance of a shot from a target’s head (value in pixels int) – Can happen several times in a session.
-//  Headshot – A direct hit in the head of a target (value in boolean) - Can happen several times in a session.
-//  Body hit - A direct hit in the body of a target (value in boolean) - Can happen several times in a session
-// */
