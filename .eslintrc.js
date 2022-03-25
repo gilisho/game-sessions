@@ -21,6 +21,9 @@ module.exports = {
       'warn',
       2
     ],
+    '@typescript-eslint/no-empty-function': [
+      'off'
+    ],
     'linebreak-style': [
       'error',
       'unix'
