@@ -28,5 +28,5 @@ export const measurementsMock = {
     { time: 27980, type: 'Body', value: true },
     { time: 28500, type: 'Headshot', value: true },
     { time: 29000, type: 'Bomb', value: true },
-  ]
+  ],
 };
