@@ -42,3 +42,16 @@ export interface GameSessionInput {
   game_session_name: string;
   measurements: Measurement[];
 }
+
+export interface GameSessionRecord {
+  id: string;
+  player_name: string;
+  game_session_name: string;
+  dateCreated: Date;
+  speedScore: number;
+  accuracyScore: number;
+}
+
+export interface CreateGameSessionRequest {
+  gameSession: GameSessionInput;
+}
