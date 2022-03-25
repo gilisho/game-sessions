@@ -1,8 +1,21 @@
 import { Chance } from 'chance';
+import {
+  BodyMeasurement,
+  BombMeasurement,
+  GameSessionInput,
+  HeadshotMeasurement,
+  Measurement,
+  MissesMeasurement,
+  MoveMeasurement,
+} from '../types';
 
 const chance = new Chance();
 
-const aMoveMeasurement = ({ minimumTime }: { minimumTime: number }) => {
+const aMoveMeasurement = ({
+  minimumTime,
+}: {
+  minimumTime: number;
+}): MoveMeasurement => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Move',
@@ -10,7 +23,11 @@ const aMoveMeasurement = ({ minimumTime }: { minimumTime: number }) => {
   };
 };
 
-const aMissesMeasurement = ({ minimumTime }: { minimumTime: number }) => {
+const aMissesMeasurement = ({
+  minimumTime,
+}: {
+  minimumTime: number;
+}): MissesMeasurement => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Misses',
@@ -18,7 +35,11 @@ const aMissesMeasurement = ({ minimumTime }: { minimumTime: number }) => {
   };
 };
 
-const aBodyMeasurement = ({ minimumTime }: { minimumTime: number }) => {
+const aBodyMeasurement = ({
+  minimumTime,
+}: {
+  minimumTime: number;
+}): BodyMeasurement => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Body',
@@ -26,7 +47,11 @@ const aBodyMeasurement = ({ minimumTime }: { minimumTime: number }) => {
   };
 };
 
-const aHeadshotMeasurement = ({ minimumTime }: { minimumTime: number }) => {
+const aHeadshotMeasurement = ({
+  minimumTime,
+}: {
+  minimumTime: number;
+}): HeadshotMeasurement => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Headshot',
@@ -34,7 +59,11 @@ const aHeadshotMeasurement = ({ minimumTime }: { minimumTime: number }) => {
   };
 };
 
-const aBombMeasurement = ({ minimumTime }: { minimumTime: number }) => {
+const aBombMeasurement = ({
+  minimumTime,
+}: {
+  minimumTime: number;
+}): BombMeasurement => {
   return {
     time: chance.natural({ min: minimumTime, max: minimumTime + 10000 }),
     type: 'Bomb',
@@ -56,7 +85,7 @@ const aNonBombMeasurement = ({ minTime }: { minTime: number }) => {
 const someMeasurements = ({
   withBomb = chance.bool(),
   numOfMeasurements = chance.natural({ min: 20, max: 100 }),
-}: { withBomb?: boolean; numOfMeasurements?: number } = {}) => {
+}: { withBomb?: boolean; numOfMeasurements?: number } = {}): Measurement[] => {
   const measurements = [];
 
   let currentTime = 0;
@@ -74,7 +103,7 @@ const someMeasurements = ({
   return measurements;
 };
 
-export const aGameSessionInput = () => {
+export const aGameSessionInput = (): GameSessionInput => {
   const measurements = someMeasurements();
   return {
     player_name: chance.name({}),
