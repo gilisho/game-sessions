@@ -7,7 +7,7 @@
     "build": "tsc -b tsconfig.json",
     "start": "tsc -w & nodemon dist/index.js",
     "pretest": "npm run lint",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "eslint --fix --ext .ts ."
   },
   "author": "gilisho@github.com",
@@ -42,6 +42,7 @@
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.1",
+    "ts-jest": "^27.1.4",
     "typescript": "^4.6.2"
   },
   "jest": {
