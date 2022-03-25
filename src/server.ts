@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-import { gameSessionsRouter } from './routes/gameSessionsRouter';
+import { gameSessionsRouter } from './routes/game-sessions-router';
 
 const app = express();
 
