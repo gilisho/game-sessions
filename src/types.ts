@@ -1,3 +1,5 @@
+export type MeasurementType = 'Bomb' | 'Body' | 'Headshot' | 'Move' | 'Misses';
+
 export interface BombMeasurement {
   time: number;
   type: 'Bomb';
