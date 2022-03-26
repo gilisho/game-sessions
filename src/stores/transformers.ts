@@ -3,17 +3,24 @@ import {
   GameSessionRecord,
   MeasurementRecord,
   MeasurementWithScore,
-} from '../../types';
+} from '../types';
 
 export const toMeasurementWithScore = (
   measurement: MeasurementRecord,
-): MeasurementWithScore =>
-  ({
+): MeasurementWithScore => {
+  const shouldConvertToBoolean =
+    measurement.type === 'Bomb' ||
+    measurement.type === 'Headshot' ||
+    measurement.type === 'Body';
+  return {
     time: measurement.time,
     score: measurement.score,
     type: measurement.type,
-    value: measurement.value,
-  } as MeasurementRecord);
+    value: shouldConvertToBoolean
+      ? Boolean(measurement.value)
+      : measurement.value,
+  } as MeasurementWithScore;
+};
 
 export const toGameSessionListItem = (
   gameSessionRecord: GameSessionRecord,

@@ -7,9 +7,9 @@ import {
   MeasurementWithScore,
   MissesMeasurement,
   MoveMeasurement,
-} from '../../types';
-import { MeasurementScoreCalculator } from './scores/measurement-score-calculator';
-import { SkillScoreCalculator } from './scores/skill-score-calculator';
+} from '../../../types';
+import { MeasurementScoreCalculator } from './measurement-score-calculator';
+import { SkillScoreCalculator } from './skill-score-calculator';
 
 export class ScoreCalculator {
   private measurementScoreCalculator: MeasurementScoreCalculator;

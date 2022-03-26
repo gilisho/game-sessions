@@ -3,6 +3,9 @@ import mysql from 'mysql';
 
 dotenv.config({ debug: true });
 
+const GAME_SESSIONS_TABLE = 'game_sessions';
+const MEASUREMENTS_TABLE = 'measurements';
+
 const database = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -11,4 +14,4 @@ const database = mysql.createConnection({
   multipleStatements: true,
 });
 
-export { database };
+export { database, GAME_SESSIONS_TABLE, MEASUREMENTS_TABLE };
