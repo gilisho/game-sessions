@@ -17,7 +17,7 @@ import { toGameSessionListItem, toMeasurementWithScore } from './transformers';
 const GAME_SESSIONS_TABLE = 'game_sessions';
 const MEASUREMENTS_TABLE = 'measurements';
 
-const listGameSession: RequestHandler = (req, res, next) => {
+const listGameSession: RequestHandler = (req, res) => {
   // returns the list of game sessions (name and id)
   database.query(
     {
@@ -36,7 +36,7 @@ const listGameSession: RequestHandler = (req, res, next) => {
   );
 };
 
-const getGameSession: RequestHandler = (req, res, next) => {
+const getGameSession: RequestHandler = (req, res) => {
   const { id } = req.params;
   database.query(
     {
@@ -50,7 +50,7 @@ const getGameSession: RequestHandler = (req, res, next) => {
       if (gameSession) {
         database.query(
           {
-            sql: `SELECT * FROM ${MEASUREMENTS_TABLE} where game_session_id = ?;`,
+            sql: `SELECT * FROM ${MEASUREMENTS_TABLE} where game_session_id = ? ORDER BY time ASC;`,
           },
           [id],
           (_err, measurements: MeasurementRecord[]) => {
@@ -76,11 +76,20 @@ const getGameSession: RequestHandler = (req, res, next) => {
   );
 };
 
-const createGameSession: RequestHandler = (req, res, next) => {
+const createGameSession: RequestHandler = (req, res) => {
   const { gameSession: gameSessionInput }: CreateGameSessionRequest = req.body;
 
   if (!gameSessionInput) {
     return res.status(400).send('game session input is missing');
+  }
+  if (!gameSessionInput.game_session_name || !gameSessionInput.player_name) {
+    return res.status(400).send('game session name or player name are missing');
+  }
+  if (
+    !gameSessionInput.measurements ||
+    gameSessionInput.measurements.length === 0
+  ) {
+    return res.status(400).send('measurements are missing');
   }
 
   const calculator = new ScoreCalculator();
