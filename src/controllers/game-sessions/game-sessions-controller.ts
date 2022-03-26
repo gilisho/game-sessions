@@ -5,13 +5,17 @@ import {
   CreateGameSessionResponse,
   GetGameSessionResponse,
   ListGameSessionsResponse,
+  MeasurementRecord,
 } from '../../types';
 import { ScoreCalculator } from './score-calculator';
 import { randomUUID } from 'crypto';
 import { database } from '../../db';
 import { toMySqlTime } from './time';
+import { aTransaction } from '../../utils/sql';
+import { toGameSessionListItem, toMeasurementWithScore } from './transformers';
 
 const GAME_SESSIONS_TABLE = 'game_sessions';
+const MEASUREMENTS_TABLE = 'measurements';
 
 const listGameSession: RequestHandler = (req, res, next) => {
   // returns the list of game sessions (name and id)
@@ -24,14 +28,10 @@ const listGameSession: RequestHandler = (req, res, next) => {
       if (err) {
         throw err;
       }
-      console.log(rows);
       const response: ListGameSessionsResponse = {
-        gameSessions: rows.map((row) => ({
-          id: row.id,
-          game_session_name: row.name,
-        })),
+        gameSessions: rows.map(toGameSessionListItem),
       };
-      res.send(response);
+      return res.json(response);
     },
   );
 };
@@ -40,7 +40,7 @@ const getGameSession: RequestHandler = (req, res, next) => {
   const { id } = req.params;
   database.query(
     {
-      sql: `SELECT * FROM game_sessions WHERE id = ?;`,
+      sql: `SELECT * FROM ${GAME_SESSIONS_TABLE} WHERE id = ?;`,
     },
     [id],
     (err, [gameSession]: GameSessionRecord[]) => {
@@ -48,12 +48,30 @@ const getGameSession: RequestHandler = (req, res, next) => {
         throw err;
       }
       if (gameSession) {
-        const response: GetGameSessionResponse = {
-          gameSession: { ...gameSession, measurements: [] },
-        };
-        return res.json(response);
+        database.query(
+          {
+            sql: `SELECT * FROM ${MEASUREMENTS_TABLE} where game_session_id = ?;`,
+          },
+          [id],
+          (_err, measurements: MeasurementRecord[]) => {
+            if (_err) {
+              throw err;
+            }
+            const measurementsForResponse = measurements.map(
+              toMeasurementWithScore,
+            );
+            const response: GetGameSessionResponse = {
+              gameSession: {
+                ...gameSession,
+                measurements: measurementsForResponse,
+              },
+            };
+            return res.json(response);
+          },
+        );
+      } else {
+        return res.status(404).json({ error: 'not_found' });
       }
-      res.status(404).json({ error: 'not_found' });
     },
   );
 };
@@ -68,20 +86,40 @@ const createGameSession: RequestHandler = (req, res, next) => {
   const calculator = new ScoreCalculator();
   const {
     skillScores: { speedScore, accuracyScore },
+    measurements,
   } = calculator.calculate(gameSessionInput.measurements);
   const gameSessionId = randomUUID();
 
+  const transaction = aTransaction();
+
+  const createGameSessionQuery = `INSERT INTO ${GAME_SESSIONS_TABLE} (id, name, player_name, date_created, speed_score, accuracy_score) VALUES (?, ?, ?, ?, ?, ?);`;
+  transaction.withQuery(createGameSessionQuery, [
+    gameSessionId,
+    gameSessionInput.game_session_name,
+    gameSessionInput.player_name,
+    toMySqlTime(),
+    Number.parseInt(String(speedScore), 10),
+    Number.parseInt(String(accuracyScore), 10),
+  ]);
+
+  const createMeasurementQuery = `INSERT INTO ${MEASUREMENTS_TABLE} (id, type, value, time, score, game_session_id) VALUES (?, ?, ?, ?, ?, ?);`;
+  measurements.forEach((measurement) => {
+    transaction.withQuery(createMeasurementQuery, [
+      randomUUID(),
+      measurement.type,
+      measurement.value,
+      measurement.time,
+      measurement.score,
+      gameSessionId,
+    ]);
+  });
+
+  const { params, query } = transaction.toSql();
+
   database.query(
     {
-      sql: `INSERT INTO ${GAME_SESSIONS_TABLE} (id, name, player_name, date_created, speed_score, accuracy_score) VALUES (?, ?, ?, ?, ?, ?);`,
-      values: [
-        gameSessionId,
-        gameSessionInput.game_session_name,
-        gameSessionInput.player_name,
-        toMySqlTime(),
-        speedScore,
-        accuracyScore,
-      ],
+      sql: query,
+      values: params,
     },
     (err) => {
       if (err) {

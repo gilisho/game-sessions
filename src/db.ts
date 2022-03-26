@@ -8,6 +8,7 @@ const database = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   timezone: 'UTC',
+  multipleStatements: true,
 });
 
 export { database };

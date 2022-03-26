@@ -3,7 +3,7 @@ This file is for defining the API - in terms of what the server is expecting to 
 and what the client should expect to get as a response.
  */
 
-import { GameSession, GameSessionInput } from '.';
+import { GameSession, GameSessionInput, GameSessionListItem } from '.';
 
 export interface CreateGameSessionRequest {
   gameSession: GameSessionInput;
@@ -14,10 +14,7 @@ export interface CreateGameSessionResponse {
 
 export interface ListGameSessionsRequest {}
 export interface ListGameSessionsResponse {
-  gameSessions: {
-    id: string;
-    game_session_name: string;
-  }[];
+  gameSessions: GameSessionListItem[];
 }
 
 export interface GetGameSessionRequest {

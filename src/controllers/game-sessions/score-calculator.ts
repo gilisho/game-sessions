@@ -4,6 +4,7 @@ import {
   HeadshotMeasurement,
   Measurement,
   MeasurementType,
+  MeasurementWithScore,
   MissesMeasurement,
   MoveMeasurement,
 } from '../../types';
@@ -24,7 +25,7 @@ export class ScoreCalculator {
   ): {
     skillScores: { speedScore: number; accuracyScore: number };
     accumulatedAverage: Record<MeasurementType, { averageScore: number }>;
-    measurements: (Measurement & { score: number })[];
+    measurements: MeasurementWithScore[];
   } => {
     const measurementsWithScore = measurements.map((measurement) => {
       return {
@@ -47,7 +48,7 @@ export class ScoreCalculator {
   };
 
   private getAccumulatedAverage = (
-    measurementsWithScore: (Measurement & { score: number })[],
+    measurementsWithScore: MeasurementWithScore[],
   ): Record<MeasurementType, { averageScore: number }> => {
     const measurementsByType = this.splitByMeasurementType(
       measurementsWithScore,
@@ -69,7 +70,7 @@ export class ScoreCalculator {
   };
 
   private splitByMeasurementType = (
-    measurementsWithScore: (Measurement & { score: number })[],
+    measurementsWithScore: MeasurementWithScore[],
   ) => {
     const isBombMeasurement = (
       measurement: Measurement,

@@ -37,10 +37,17 @@ export type Measurement =
   | MoveMeasurement
   | MissesMeasurement;
 
-export type MeasurementRecord = (
+export type MeasurementWithScore = (
   | HeadshotMeasurement
   | BodyMeasurement
   | BombMeasurement
   | MoveMeasurement
   | MissesMeasurement
-) & { score: number; id: string };
+) & {
+  score: number;
+};
+
+export type MeasurementRecord = MeasurementWithScore & {
+  id: string;
+  game_session_id: string;
+};

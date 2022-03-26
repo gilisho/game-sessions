@@ -1,4 +1,4 @@
-import { Measurement } from '.';
+import { Measurement, MeasurementWithScore } from '.';
 
 export interface GameSessionInput {
   player_name: string;
@@ -15,12 +15,11 @@ export interface GameSessionRecord {
   accuracy_score: number;
 }
 
-export interface GameSession {
+export type GameSession = GameSessionRecord & {
+  measurements: MeasurementWithScore[];
+};
+
+export interface GameSessionListItem {
   id: string;
-  name: string;
-  player_name: string;
-  date_created: Date;
-  speed_score: number;
-  accuracy_score: number;
-  measurements: Measurement[];
+  game_session_name: string;
 }
