@@ -1,7 +1,13 @@
 import { RequestHandler } from 'express';
-import { CreateGameSessionRequest, GameSessionRecord } from '../../types';
+import { GameSessionRecord } from '../../types';
 import { ScoreCalculator } from './score-calculator';
 import { randomUUID } from 'crypto';
+import {
+  CreateGameSessionRequest,
+  CreateGameSessionResponse,
+  GetGameSessionResponse,
+  ListGameSessionsResponse,
+} from '../../types/api-types';
 
 const gameSessions: GameSessionRecord[] = [];
 
@@ -14,7 +20,11 @@ export const gameSessionsController: {
       id: session.id,
       game_session_name: session.game_session_name,
     }));
-    res.send({ gameSessions: gameSessionsList });
+
+    const response: ListGameSessionsResponse = {
+      gameSessions: gameSessionsList,
+    };
+    res.send(response);
   },
   get: (req, res, next) => {
     // returns a game session by id
@@ -22,14 +32,15 @@ export const gameSessionsController: {
     const gameSession = gameSessions.find((session) => session.id === id);
 
     if (gameSession) {
-      res.send({ gameSession });
+      const response: GetGameSessionResponse = { gameSession };
+      res.send(response);
     }
     res.status(404);
   },
   create: (req, res, next) => {
     //  calculates the measurements' grades and accumulated scores, stores the information in the database and returns the game session id
-    const { gameSession: gameSessionInput } =
-      req.body as CreateGameSessionRequest;
+    const { gameSession: gameSessionInput }: CreateGameSessionRequest =
+      req.body;
 
     if (!gameSessionInput) {
       return res.status(400).send('game session input is missing');
@@ -51,6 +62,7 @@ export const gameSessionsController: {
 
     gameSessions.push(gameSession);
 
-    res.send({ id: gameSession.id });
+    const response: CreateGameSessionResponse = { id: gameSession.id };
+    res.send(response);
   },
 };

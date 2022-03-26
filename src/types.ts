@@ -51,7 +51,3 @@ export interface GameSessionRecord {
   speedScore: number;
   accuracyScore: number;
 }
-
-export interface CreateGameSessionRequest {
-  gameSession: GameSessionInput;
-}
