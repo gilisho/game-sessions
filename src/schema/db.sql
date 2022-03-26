@@ -10,8 +10,8 @@ CREATE TABLE `game_sessions` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 
-DROP TABLE IF EXISTS `game_measurements`;
-CREATE TABLE `game_measurements` (
+DROP TABLE IF EXISTS `measurements`;
+CREATE TABLE `measurements` (
   id VARCHAR(128) NOT NULL,
   time INT UNSIGNED NOT NULL,
   type VARCHAR(16) NOT NULL,
