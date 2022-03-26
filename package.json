@@ -4,8 +4,12 @@
   "description": "Project for game session analysis",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -b tsconfig.json",
-    "start": "tsc -w & nodemon dist/index.js",
+    "build:docker": "docker build -t game-sessions-mysql ./src/schema",
+    "build:ts": "tsc -b tsconfig.json",
+    "build": "npm run build:docker && npm run build:ts",
+    "start:db": "docker run -p 3306:3306 --name game-sessions-mysql game-sessions-mysql",
+    "start:server": "tsc -w & nodemon dist/index.js",
+    "debug:db": "docker container exec -it game-sessions-mysql bash",
     "pretest": "npm run lint",
     "test": "jest",
     "lint": "eslint --fix --ext .ts ."
@@ -16,9 +20,12 @@
     "axios": "^0.26.1",
     "body-parser": "^1.19.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-validator": "^6.14.0",
     "helmet": "^5.0.2",
     "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
     "ts-node": "^10.7.0"
   },
   "devDependencies": {
@@ -29,6 +36,7 @@
     "@types/helmet": "^4.0.0",
     "@types/jest": "^27.4.1",
     "@types/morgan": "^1.9.3",
+    "@types/mysql": "^2.15.21",
     "@types/node": "^16.11.26",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
