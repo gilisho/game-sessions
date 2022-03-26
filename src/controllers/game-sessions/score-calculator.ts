@@ -7,21 +7,17 @@ import {
   MissesMeasurement,
   MoveMeasurement,
 } from '../../types';
-import {
-  BODY_WEIGHT,
-  BOMB_WEIGHT,
-  HEADSHOT_WEIGHT,
-  MISSES_WEIGHT,
-  MOVE_WEIGHT,
-} from './weights';
 import { MeasurementScoreCalculator } from './measurement-score-calculator';
+import { SkillScoreCalculator } from './skill-score-calculator';
 
 export class ScoreCalculator {
   private readonly measurements: (Measurement & { score: number })[];
   private measurementScoreCalculator: MeasurementScoreCalculator;
+  private skillScoreCalculator: SkillScoreCalculator;
 
   constructor(measurements: Measurement[]) {
     this.measurementScoreCalculator = new MeasurementScoreCalculator();
+    this.skillScoreCalculator = new SkillScoreCalculator();
     this.measurements =
       this.measurementScoreCalculator.calculateMeasurementScores(measurements);
   }
@@ -32,8 +28,10 @@ export class ScoreCalculator {
     measurements: (Measurement & { score: number })[];
   } => {
     const accumulatedAverage = this.getAccumulatedAverage();
-    const speedScore = this.getSpeedSkillScore(accumulatedAverage);
-    const accuracyScore = this.getAccuracySkillScore(accumulatedAverage);
+    const speedScore =
+      this.skillScoreCalculator.getSpeedScore(accumulatedAverage);
+    const accuracyScore =
+      this.skillScoreCalculator.getAccuracyScore(accumulatedAverage);
     return {
       skillScores: { speedScore, accuracyScore },
       accumulatedAverage,
@@ -96,24 +94,5 @@ export class ScoreCalculator {
         measurements: this.measurements.filter(isMoveMeasurement),
       },
     };
-  };
-
-  private getSpeedSkillScore = (
-    accumulatedScores: Record<MeasurementType, { averageScore: number }>,
-  ): number => {
-    return (
-      accumulatedScores.Bomb.averageScore * BOMB_WEIGHT +
-      accumulatedScores.Move.averageScore * MOVE_WEIGHT
-    );
-  };
-
-  private getAccuracySkillScore = (
-    accumulatedScores: Record<MeasurementType, { averageScore: number }>,
-  ): number => {
-    return (
-      accumulatedScores.Body.averageScore * BODY_WEIGHT +
-      accumulatedScores.Misses.averageScore * MISSES_WEIGHT +
-      accumulatedScores.Headshot.averageScore * HEADSHOT_WEIGHT
-    );
   };
 }
