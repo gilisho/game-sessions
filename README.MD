@@ -47,6 +47,12 @@ URL: `/game-sessions`.
 Takes in the input, calculates the measurements' grades and accumulated scores, stores the information in the database (details about the stored data below).  
 Returns the game session id.
 
-### Database
+### Database Design
 
-Database is MySQL.
+Database is MySQL.  
+The database is consisted of two tables: one for the game session records and one for the measurement records.  
+
+The following chart describes the database:
+
+
+![db](./assets/game_sessions_db.png)
