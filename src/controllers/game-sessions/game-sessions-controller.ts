@@ -1,13 +1,13 @@
 import { RequestHandler } from 'express';
-import { GameSessionRecord } from '../../types';
-import { ScoreCalculator } from './score-calculator';
-import { randomUUID } from 'crypto';
 import {
+  GameSessionRecord,
   CreateGameSessionRequest,
   CreateGameSessionResponse,
   GetGameSessionResponse,
   ListGameSessionsResponse,
-} from '../../types/api-types';
+} from '../../types';
+import { ScoreCalculator } from './score-calculator';
+import { randomUUID } from 'crypto';
 
 const gameSessions: GameSessionRecord[] = [];
 
