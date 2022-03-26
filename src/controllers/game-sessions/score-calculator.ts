@@ -24,7 +24,6 @@ export class ScoreCalculator {
     measurements: Measurement[],
   ): {
     skillScores: { speedScore: number; accuracyScore: number };
-    accumulatedAverage: Record<MeasurementType, { averageScore: number }>;
     measurements: MeasurementWithScore[];
   } => {
     const measurementsWithScore = measurements.map((measurement) => {
@@ -33,16 +32,18 @@ export class ScoreCalculator {
         score: this.measurementScoreCalculator.calculate(measurement),
       };
     });
+
     const accumulatedAverage = this.getAccumulatedAverage(
       measurementsWithScore,
     );
+
     const speedScore =
       this.skillScoreCalculator.getSpeedScore(accumulatedAverage);
     const accuracyScore =
       this.skillScoreCalculator.getAccuracyScore(accumulatedAverage);
+
     return {
       skillScores: { speedScore, accuracyScore },
-      accumulatedAverage,
       measurements: measurementsWithScore,
     };
   };
