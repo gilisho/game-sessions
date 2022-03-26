@@ -69,10 +69,10 @@ export const gameSessionsController: {
       return res.status(400).send('game session input is missing');
     }
 
-    const calculator = new ScoreCalculator(gameSessionInput.measurements);
+    const calculator = new ScoreCalculator();
     const {
       skillScores: { speedScore, accuracyScore },
-    } = calculator.calculate();
+    } = calculator.calculate(gameSessionInput.measurements);
     const gameSessionId = randomUUID();
 
     database.query(

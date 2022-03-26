@@ -8,13 +8,7 @@ import {
 } from '../../../types';
 
 export class MeasurementScoreCalculator {
-  calculateMeasurementScores = (measurements: Measurement[]) => {
-    return measurements.map((measurement) => {
-      return { ...measurement, score: this.getMeasurementScore(measurement) };
-    });
-  };
-
-  private getMeasurementScore = (measurement: Measurement) => {
+  calculate = (measurement: Measurement) => {
     switch (measurement.type) {
       case 'Body':
         return this.getBodyScore(measurement);

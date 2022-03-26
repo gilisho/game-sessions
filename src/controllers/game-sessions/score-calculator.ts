@@ -11,23 +11,30 @@ import { MeasurementScoreCalculator } from './scores/measurement-score-calculato
 import { SkillScoreCalculator } from './scores/skill-score-calculator';
 
 export class ScoreCalculator {
-  private readonly measurements: (Measurement & { score: number })[];
   private measurementScoreCalculator: MeasurementScoreCalculator;
   private skillScoreCalculator: SkillScoreCalculator;
 
-  constructor(measurements: Measurement[]) {
+  constructor() {
     this.measurementScoreCalculator = new MeasurementScoreCalculator();
     this.skillScoreCalculator = new SkillScoreCalculator();
-    this.measurements =
-      this.measurementScoreCalculator.calculateMeasurementScores(measurements);
   }
 
-  calculate = (): {
+  calculate = (
+    measurements: Measurement[],
+  ): {
     skillScores: { speedScore: number; accuracyScore: number };
     accumulatedAverage: Record<MeasurementType, { averageScore: number }>;
     measurements: (Measurement & { score: number })[];
   } => {
-    const accumulatedAverage = this.getAccumulatedAverage();
+    const measurementsWithScore = measurements.map((measurement) => {
+      return {
+        ...measurement,
+        score: this.measurementScoreCalculator.calculate(measurement),
+      };
+    });
+    const accumulatedAverage = this.getAccumulatedAverage(
+      measurementsWithScore,
+    );
     const speedScore =
       this.skillScoreCalculator.getSpeedScore(accumulatedAverage);
     const accuracyScore =
@@ -35,15 +42,16 @@ export class ScoreCalculator {
     return {
       skillScores: { speedScore, accuracyScore },
       accumulatedAverage,
-      measurements: this.measurements,
+      measurements: measurementsWithScore,
     };
   };
 
-  private getAccumulatedAverage = (): Record<
-    MeasurementType,
-    { averageScore: number }
-  > => {
-    const measurementsByType = this.splitByMeasurementType();
+  private getAccumulatedAverage = (
+    measurementsWithScore: (Measurement & { score: number })[],
+  ): Record<MeasurementType, { averageScore: number }> => {
+    const measurementsByType = this.splitByMeasurementType(
+      measurementsWithScore,
+    );
     return Object.fromEntries(
       Object.entries(measurementsByType).map(
         ([measurementType, { measurements: measurementsOfType }]) => {
@@ -60,7 +68,9 @@ export class ScoreCalculator {
     ) as Record<MeasurementType, { averageScore: number }>;
   };
 
-  private splitByMeasurementType = () => {
+  private splitByMeasurementType = (
+    measurementsWithScore: (Measurement & { score: number })[],
+  ) => {
     const isBombMeasurement = (
       measurement: Measurement,
     ): measurement is BombMeasurement => measurement.type === 'Bomb';
@@ -79,19 +89,19 @@ export class ScoreCalculator {
 
     return {
       Bomb: {
-        measurements: this.measurements.filter(isBombMeasurement),
+        measurements: measurementsWithScore.filter(isBombMeasurement),
       },
       Headshot: {
-        measurements: this.measurements.filter(isHeadshotMeasurement),
+        measurements: measurementsWithScore.filter(isHeadshotMeasurement),
       },
       Body: {
-        measurements: this.measurements.filter(isBodyMeasurement),
+        measurements: measurementsWithScore.filter(isBodyMeasurement),
       },
       Misses: {
-        measurements: this.measurements.filter(isMissesMeasurement),
+        measurements: measurementsWithScore.filter(isMissesMeasurement),
       },
       Move: {
-        measurements: this.measurements.filter(isMoveMeasurement),
+        measurements: measurementsWithScore.filter(isMoveMeasurement),
       },
     };
   };
