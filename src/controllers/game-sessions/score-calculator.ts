@@ -16,24 +16,24 @@ import {
 } from './weights';
 import { MeasurementScoreCalculator } from './measurement-score-calculator';
 
-export class GradeCalculator {
-  private readonly measurements: (Measurement & { grade: number })[];
+export class ScoreCalculator {
+  private readonly measurements: (Measurement & { score: number })[];
   private measurementScoreCalculator: MeasurementScoreCalculator;
 
   constructor(measurements: Measurement[]) {
     this.measurementScoreCalculator = new MeasurementScoreCalculator();
     this.measurements =
-      this.measurementScoreCalculator.calculateMeasurementGrades(measurements);
+      this.measurementScoreCalculator.calculateMeasurementScores(measurements);
   }
 
   calculate = (): {
     skillScores: { speedScore: number; accuracyScore: number };
     accumulatedAverage: Record<MeasurementType, { averageScore: number }>;
-    measurements: (Measurement & { grade: number })[];
+    measurements: (Measurement & { score: number })[];
   } => {
     const accumulatedAverage = this.getAccumulatedAverage();
-    const speedScore = this.getSpeedSkillGrade(accumulatedAverage);
-    const accuracyScore = this.getAccuracySkillGrade(accumulatedAverage);
+    const speedScore = this.getSpeedSkillScore(accumulatedAverage);
+    const accuracyScore = this.getAccuracySkillScore(accumulatedAverage);
     return {
       skillScores: { speedScore, accuracyScore },
       accumulatedAverage,
@@ -51,7 +51,7 @@ export class GradeCalculator {
         ([measurementType, { measurements: measurementsOfType }]) => {
           let totalScore = 0;
           measurementsOfType.forEach((measurement) => {
-            totalScore += measurement.grade;
+            totalScore += measurement.score;
           });
 
           const averageScore = totalScore / measurementsOfType.length;
@@ -98,22 +98,22 @@ export class GradeCalculator {
     };
   };
 
-  private getSpeedSkillGrade = (
-    accumulatedGrades: Record<MeasurementType, { averageScore: number }>,
+  private getSpeedSkillScore = (
+    accumulatedScores: Record<MeasurementType, { averageScore: number }>,
   ): number => {
     return (
-      accumulatedGrades.Bomb.averageScore * BOMB_WEIGHT +
-      accumulatedGrades.Move.averageScore * MOVE_WEIGHT
+      accumulatedScores.Bomb.averageScore * BOMB_WEIGHT +
+      accumulatedScores.Move.averageScore * MOVE_WEIGHT
     );
   };
 
-  private getAccuracySkillGrade = (
-    accumulatedGrades: Record<MeasurementType, { averageScore: number }>,
+  private getAccuracySkillScore = (
+    accumulatedScores: Record<MeasurementType, { averageScore: number }>,
   ): number => {
     return (
-      accumulatedGrades.Body.averageScore * BODY_WEIGHT +
-      accumulatedGrades.Misses.averageScore * MISSES_WEIGHT +
-      accumulatedGrades.Headshot.averageScore * HEADSHOT_WEIGHT
+      accumulatedScores.Body.averageScore * BODY_WEIGHT +
+      accumulatedScores.Misses.averageScore * MISSES_WEIGHT +
+      accumulatedScores.Headshot.averageScore * HEADSHOT_WEIGHT
     );
   };
 }

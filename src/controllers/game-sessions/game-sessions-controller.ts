@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { CreateGameSessionRequest, GameSessionRecord } from '../../types';
-import { GradeCalculator } from './grade-calculator';
+import { ScoreCalculator } from './score-calculator';
 import { randomUUID } from 'crypto';
 
 const gameSessions: GameSessionRecord[] = [];
@@ -35,7 +35,7 @@ export const gameSessionsController: {
       return res.status(400).send('game session input is missing');
     }
 
-    const calculator = new GradeCalculator(gameSessionInput.measurements);
+    const calculator = new ScoreCalculator(gameSessionInput.measurements);
     const {
       skillScores: { speedScore, accuracyScore },
     } = calculator.calculate();

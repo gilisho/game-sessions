@@ -8,47 +8,47 @@ import {
 } from '../../types';
 
 export class MeasurementScoreCalculator {
-  calculateMeasurementGrades = (measurements: Measurement[]) => {
+  calculateMeasurementScores = (measurements: Measurement[]) => {
     return measurements.map((measurement) => {
-      return { ...measurement, grade: this.getMeasurementScore(measurement) };
+      return { ...measurement, score: this.getMeasurementScore(measurement) };
     });
   };
 
   private getMeasurementScore = (measurement: Measurement) => {
     switch (measurement.type) {
       case 'Body':
-        return this.getBodyGrade(measurement);
+        return this.getBodyScore(measurement);
       case 'Bomb':
-        return this.getBombGrade(measurement);
+        return this.getBombScore(measurement);
       case 'Headshot':
-        return this.getHeadshotGrade(measurement);
+        return this.getHeadshotScore(measurement);
       case 'Misses':
-        return this.getMissesGrade(measurement);
+        return this.getMissesScore(measurement);
       case 'Move':
-        return this.getMoveGrade(measurement);
+        return this.getMoveScore(measurement);
     }
   };
 
-  private getMoveGrade = ({ value }: MoveMeasurement) => {
+  private getMoveScore = ({ value }: MoveMeasurement) => {
     if (value < 105) {
       return 100;
     }
     return value < 250 ? 70 : 0;
   };
 
-  private getBombGrade = ({ time }: BombMeasurement) => {
+  private getBombScore = ({ time }: BombMeasurement) => {
     return time < 40000 ? 100 : 0;
   };
 
-  private getHeadshotGrade = ({ value }: HeadshotMeasurement) => {
+  private getHeadshotScore = ({ value }: HeadshotMeasurement) => {
     return value ? 100 : 0;
   };
 
-  private getBodyGrade = ({ value }: BodyMeasurement) => {
+  private getBodyScore = ({ value }: BodyMeasurement) => {
     return value ? 80 : 0;
   };
 
-  private getMissesGrade = ({ value }: MissesMeasurement) => {
+  private getMissesScore = ({ value }: MissesMeasurement) => {
     if (value < 60) {
       return 100;
     }
