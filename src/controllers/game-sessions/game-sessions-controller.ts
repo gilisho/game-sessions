@@ -10,7 +10,7 @@ import {
 import { ScoreCalculator } from './score-calculator';
 import { randomUUID } from 'crypto';
 import { database } from '../../db';
-import { toMySqlTime } from './time';
+import { toMySqlTime } from './utils';
 import { aTransaction } from '../../utils/sql';
 import { toGameSessionListItem, toMeasurementWithScore } from './transformers';
 
