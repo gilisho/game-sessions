@@ -1,5 +1,4 @@
 import { aTransaction } from '../utils/sql';
-import { toMySqlTime } from '../controllers/game-sessions/utils';
 import { randomUUID } from 'crypto';
 import { database, GAME_SESSIONS_TABLE, MEASUREMENTS_TABLE } from '../db';
 import {
@@ -10,7 +9,11 @@ import {
   MeasurementRecord,
   MeasurementWithScore,
 } from '../types';
-import { toGameSessionListItem, toMeasurementWithScore } from './transformers';
+import {
+  toGameSessionListItem,
+  toMeasurementWithScore,
+  toMySqlTime,
+} from './utils';
 
 export class GameSessionsStore {
   listGameSessions = (): Promise<GameSessionListItem[]> => {

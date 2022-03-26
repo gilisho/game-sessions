@@ -3,7 +3,7 @@ import {
   GameSessionRecord,
   MeasurementRecord,
   MeasurementWithScore,
-} from '../types';
+} from '../../types';
 
 export const toMeasurementWithScore = (
   measurement: MeasurementRecord,
