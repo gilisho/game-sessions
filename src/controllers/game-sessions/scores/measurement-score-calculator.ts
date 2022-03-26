@@ -5,7 +5,7 @@ import {
   Measurement,
   MissesMeasurement,
   MoveMeasurement,
-} from '../../types';
+} from '../../../types';
 
 export class MeasurementScoreCalculator {
   calculateMeasurementScores = (measurements: Measurement[]) => {

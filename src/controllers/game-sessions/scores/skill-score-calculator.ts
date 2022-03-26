@@ -1,4 +1,4 @@
-import { MeasurementType } from '../../types';
+import { MeasurementType } from '../../../types';
 import {
   BODY_WEIGHT,
   BOMB_WEIGHT,

@@ -7,8 +7,8 @@ import {
   MissesMeasurement,
   MoveMeasurement,
 } from '../../types';
-import { MeasurementScoreCalculator } from './measurement-score-calculator';
-import { SkillScoreCalculator } from './skill-score-calculator';
+import { MeasurementScoreCalculator } from './scores/measurement-score-calculator';
+import { SkillScoreCalculator } from './scores/skill-score-calculator';
 
 export class ScoreCalculator {
   private readonly measurements: (Measurement & { score: number })[];
