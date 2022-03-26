@@ -3,7 +3,7 @@ CREATE TABLE `game_sessions` (
   id VARCHAR(128) NOT NULL,
   name VARCHAR(64) NOT NULL,
   player_name VARCHAR(32) NOT NULL,
-  date_created BIGINT UNSIGNED NOT NULL,
+  date_created DATETIME NOT NULL,
   speed_score TINYINT(1) UNSIGNED NOT NULL,
   accuracy_score TINYINT(1) UNSIGNED NOT NULL,
   PRIMARY KEY (id)

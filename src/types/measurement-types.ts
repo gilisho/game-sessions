@@ -36,3 +36,11 @@ export type Measurement =
   | BombMeasurement
   | MoveMeasurement
   | MissesMeasurement;
+
+export type MeasurementRecord = (
+  | HeadshotMeasurement
+  | BodyMeasurement
+  | BombMeasurement
+  | MoveMeasurement
+  | MissesMeasurement
+) & { score: number; id: string };
