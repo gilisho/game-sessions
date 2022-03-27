@@ -40,10 +40,18 @@ Returns the list of game sessions (name and id).
 
 #### `GetGameSession` API (`GET`)
 URL: `/game-sessions/:id`.  
+
+Path parameter:
+* `id` - game session id
+
 Returns a game session by id, including its measurements.
 
 #### `CreateGameSession` API (`POST`)
 URL: `/game-sessions`.  
+
+Payload: 
+* `gameSession` - the game session input (as in the example given in the task description)
+
 Takes in the input, calculates the measurements' grades and accumulated scores, stores the information in the database (details about the stored data below).  
 Returns the game session id.
 
