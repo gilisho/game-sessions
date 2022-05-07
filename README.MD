@@ -1,5 +1,7 @@
 # Game Sessions Analyzer Server
 
+This project based on [this](https://gist.github.com/tamarr/1af8e628811781e49a4d205e872700d7) assignment.
+
 ## Prerequisites
 
 * Node version 16 (for a quick setup use [`fnm`](https://github.com/Schniz/fnm) or [`nvm`](https://github.com/nvm-sh/nvm))
