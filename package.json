@@ -14,7 +14,10 @@
     "test": "jest",
     "lint": "eslint --fix --ext .ts ."
   },
-  "author": "gilisho@github.com",
+  "author": {
+    "name" : "Gili Shohat",
+    "url" : "https://github.com/gilisho/"
+  },
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.2",
